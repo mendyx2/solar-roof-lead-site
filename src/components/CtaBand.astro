@@ -1,0 +1,11 @@
+---
+interface Props { heading?: string; text?: string }
+const { heading = 'See solar on your roof in 30 seconds', text = 'Free, no sign-up needed to see your estimate.' } = Astro.props;
+---
+<section class="section alt">
+  <div class="container" style="text-align:center">
+    <h2>{heading}</h2>
+    <p class="muted">{text}</p>
+    <a class="btn" href="/solar-estimator">Get my free estimate</a>
+  </div>
+</section>

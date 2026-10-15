@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+<Base title="Terms of Use" description={`Terms for using the ${site.name} website and solar estimator.`}>
+  <section class="section">
+    <div class="container prose">
+      <h1>Terms of Use</h1>
+      <p class="muted"><b>Template: have this reviewed by a lawyer before launch.</b></p>
+      <h2>Estimates are not quotes</h2>
+      <p>Solar estimates on this site are generated from satellite and modeled data plus average pricing. They are for information only and are not a quote, an offer, or a guarantee of savings, production, or incentive eligibility. Final pricing comes from a licensed installer after a site evaluation.</p>
+      <h2>No tax or financial advice</h2>
+      <p>Information about incentives and financing is general and may change. Consult a qualified tax professional.</p>
+      <h2>Map data</h2>
+      <p>Imagery and map data © Google and its data providers. Use of the map features is subject to the Google Maps/Google Earth Additional Terms of Service.</p>
+      <h2>Acceptable use</h2>
+      <p>Don't scrape, overload, or misuse the estimator, or submit information that isn't yours.</p>
+      <h2>Contact</h2>
+      <p>{site.email}</p>
+    </div>
+  </section>
+</Base>

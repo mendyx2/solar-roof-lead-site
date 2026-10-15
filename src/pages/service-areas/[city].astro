@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site, cities, type City } from '../../config/site';
+
+export function getStaticPaths() {
+  return cities.map((city) => ({ params: { city: city.slug }, props: { city } }));
+}
+interface Props { city: City }
+const { city } = Astro.props;
+const others = cities.filter((c) => c.slug !== city.slug);
+const service = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Residential solar panel installation',
+  provider: { '@type': 'Organization', name: site.name },
+  areaServed: { '@type': 'City', name: `${city.name}, ${site.stateCode}` },
+};
+---
+<Base
+  title={`Solar Panels in ${city.name}, ${site.stateCode}: Costs, Utility Rules & Free Estimate`}
+  description={`Thinking about solar in ${city.name}? See your roof with panels on it, plus local utility rules (${city.utility.split(' (')[0]}), permits, and a free cost and savings estimate.`}
+  schema={[service]}
+>
+  <Breadcrumbs items={[{ name: 'Service Areas', href: '/service-areas' }, { name: city.name, href: `/service-areas/${city.slug}` }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>Solar panels in {city.name}, {site.state}</h1>
+      <p class="lead">{city.intro}</p>
+      <p><a class="btn" href="/solar-estimator">See solar on my {city.name} roof</a></p>
+
+      <h2>Your utility and solar credits</h2>
+      <p><b>Utility:</b> {city.utility}. We use about ${city.rate.toFixed(2)}/kWh for {city.name} estimates. Your actual plan may differ.</p>
+      <p>{city.netMetering}</p>
+
+      <h2>Sunshine in {city.name}</h2>
+      <p>{city.name} gets {city.sunHours}. Our estimator uses a full year of modeled sun and shade for your specific roof, not a citywide average.</p>
+
+      <h2>Permits and timeline</h2>
+      <p>{city.permits}</p>
+
+      <h2>Roof considerations</h2>
+      <p>{city.roofNotes}</p>
+
+      <h2>Nearby areas</h2>
+      <ul>{others.map((c) => <li><a href={`/service-areas/${c.slug}`}>Solar in {c.name}</a></li>)}</ul>
+    </div>
+  </section>
+  <CtaBand heading={`Get your free ${city.name} solar estimate`} />
+</Base>

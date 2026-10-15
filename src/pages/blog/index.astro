@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { posts } from './_posts';
+---
+<Base title="Solar Blog" description="Plain-English guides to home solar costs, incentives, and installers in Texas.">
+  <Breadcrumbs items={[{ name: 'Blog', href: '/blog' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container">
+      <h1>Solar guides</h1>
+      <div class="grid cols-2">
+        {posts.map((p) => (
+          <a class="card" style="text-decoration:none;color:inherit" href={`/blog/${p.slug}`}>
+            <h2 style="font-size:1.25rem">{p.title}</h2>
+            <p class="small muted">{p.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

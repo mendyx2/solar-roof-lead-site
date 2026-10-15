@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqs } from '../config/faq';
+import { site } from '../config/site';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base title="Solar FAQ" description={`Answers to common questions about home solar in ${site.state}: cost, tax credits in 2026, roofs, HOAs, and what happens after you request a quote.`} schema={[schema]}>
+  <Breadcrumbs items={[{ name: 'FAQ', href: '/faq' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>Frequently asked questions</h1>
+      {faqs.map((f) => <details open><summary>{f.q}</summary><p>{f.a}</p></details>)}
+    </div>
+  </section>
+  <CtaBand />
+</Base>
