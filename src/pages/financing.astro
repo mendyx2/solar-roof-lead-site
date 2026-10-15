@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../config/site';
+---
+<Base title={`Solar Financing & Incentives in ${site.state} (2026)`} description="Cash, loan, lease, or PPA? How solar financing works in 2026 now that the 30% federal homeowner tax credit has ended, plus which incentives may still apply.">
+  <Breadcrumbs items={[{ name: 'Financing', href: '/financing' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>Solar financing and incentives in 2026</h1>
+      <p class="lead">The rules changed this year. Here's an up-to-date, plain-English guide.</p>
+      <div class="notice"><b>Important:</b> the 30% federal residential solar tax credit (Section 25D) ended for systems installed after December 31, 2025. Homeowners who buy a system in 2026 cannot claim it. This page is general information, not tax advice.</div>
+      <h2>Cash purchase</h2>
+      <p>Highest long-term savings and no interest. You own the system and any added home value. Without the federal credit, payback is longer than it was in 2025, so check your estimate carefully.</p>
+      <h2>Solar loan</h2>
+      <p>No or low money down, and you still own the system. Compare the APR, the term, and any "dealer fees" built into the price. A low advertised rate can hide a higher system price.</p>
+      <h2>Lease or power purchase agreement (PPA)</h2>
+      <p>A company owns the panels on your roof. You pay a monthly lease or a per-kWh rate. Because the owner is a business, these deals may still benefit from federal business tax credits, which can lower your payment. Read the escalator (yearly price increase), the contract length, and what happens if you sell your home.</p>
+      <h2>Local and utility programs</h2>
+      <ul>
+        <li><b>Austin Energy</b> and <b>CPS Energy</b> (San Antonio) have run their own solar rebates and credit programs. Check their current terms.</li>
+        <li>In deregulated areas (Houston, Dallas–Fort Worth), retail electricity providers offer solar buyback plans that pay for the extra power you send to the grid.</li>
+        <li>Texas offers a property tax exemption for the added value of a solar system on your home (file with your county appraisal district).</li>
+      </ul>
+      <p>Not sure what fits? <a href="/solar-estimator">Start with your free estimate</a> and ask your specialist to compare all options side by side.</p>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

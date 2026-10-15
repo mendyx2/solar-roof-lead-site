@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site, cities } from '../../config/site';
+---
+<Base title={`Solar Service Areas in ${site.state}`} description={`Home solar estimates and installation across ${cities.map((c) => c.name).join(', ')}.`}>
+  <Breadcrumbs items={[{ name: 'Service Areas', href: '/service-areas' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container">
+      <h1>Where we help homeowners go solar</h1>
+      <p class="lead">Each area has different utilities, buyback rules, and permitting. Pick your city for the local details.</p>
+      <div class="grid cols-3">
+        {cities.map((c) => (
+          <a class="card" style="text-decoration:none;color:inherit" href={`/service-areas/${c.slug}`}>
+            <h2 style="font-size:1.3rem">{c.name}, {site.stateCode}</h2>
+            <p class="small muted">{c.county} · {c.utility}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

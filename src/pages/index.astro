@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, cities } from '../config/site';
+import { faqs } from '../config/faq';
+---
+<Base title={`${site.name}: Free Solar Estimate for ${site.state} Homes`} description={site.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>See solar panels on your own roof before you talk to anyone</h1>
+      <p class="lead">Enter your address to see your roof from above, with panels laid out where the sun hits best. Get a cost, savings, and payback estimate for your {site.state} home in about 30 seconds.</p>
+      <div class="hero-cta">
+        <a class="btn" href="/solar-estimator">See my roof &amp; estimate</a>
+        <a class="btn secondary" style="color:#fff;border-color:#fff" href="/solar-installation">How solar works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>How it works</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3>1. Find your roof</h3><p>Type your address. We pull satellite imagery and a 3D sunlight model of your roof.</p></div>
+        <div class="card"><h3>2. Pick a package</h3><p>Choose how much of your electric bill to cover and watch the panels fill in on your roof.</p></div>
+        <div class="card"><h3>3. Get your numbers</h3><p>See system size, cost range, first-year savings, and payback. Request an exact quote only if you want one.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container grid cols-2">
+      <div>
+        <h2>Why {site.state} homeowners look at solar</h2>
+        <ul>
+          <li>Long, hot summers mean high air-conditioning bills, right when solar produces the most.</li>
+          <li>Strong sunshine across the state, often over 2,600 hours a year.</li>
+          <li>Texas law limits HOAs from banning rooftop solar.</li>
+          <li>Batteries can keep essentials running during grid outages.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Honest numbers, no pressure</h2>
+        <p>Our estimates use clear, conservative assumptions and show ranges, not hype. The 30% federal homeowner tax credit ended after 2025, and we factor that in. <a href="/financing">See what incentives still apply</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Areas we serve</h2>
+      <div class="grid cols-3">
+        {cities.map((c) => (
+          <a class="card" style="text-decoration:none;color:inherit" href={`/service-areas/${c.slug}`}>
+            <h3>Solar in {c.name}</h3>
+            <p class="small muted">{c.utility}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container prose">
+      <h2>Common questions</h2>
+      {faqs.slice(0, 4).map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+      <p><a href="/faq">All FAQs →</a></p>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

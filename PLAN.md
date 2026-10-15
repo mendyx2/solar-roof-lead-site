@@ -263,15 +263,17 @@ keywords. If you need leads sooner, the estimator also works as the landing page
 
 ---
 
-## 8. Open decisions for you
+## 8. Decisions (Oct 15, 2026)
 
-1. Single-installer site or lead-gen marketplace (section 1)?
-2. Launch market: which metro or state or province first?
-3. Solar first, roofing first, or both at launch? (Recommendation: solar first, since the
-   Solar API does the heavy lifting; then add roofing.)
-4. Will you set up a Google Cloud billing account? It's needed for the Maps and Solar
-   APIs even at $0 usage.
-5. Bilingual (fr-CA) for Quebec, yes or no?
+1. **Business model:** hybrid. Launch our own lead-gen brand and use the live estimator as a demo
+   to sign 2–3 installers, who buy leads (pay-per-lead) or a white-label copy (setup fee plus a monthly fee).
+2. **Launch market:** Texas, with Houston, Dallas, Fort Worth, Austin, and San Antonio first. Florida and Arizona next.
+3. **Scope:** solar first. Roofing mode comes after launch.
+4. **Google Cloud billing:** yes, with quota caps and budget alerts.
+5. **French (fr-CA):** no. English only to launch faster.
 
-Once these are answered, phase 0–1 scaffolding (Astro plus Cloudflare) can start in this
-repo.
+## 9. Status
+
+Phases 1–3 are implemented (static site, solar estimator MVP with the bill-based fallback, and lead capture).
+See SETUP.md for the launch steps. Next: roofing mode, a draw-your-roof fallback, an admin leads
+page, and more local content.

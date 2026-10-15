@@ -1,0 +1,21 @@
+---
+import { site, navLinks } from '../config/site';
+const [first, ...rest] = site.name.split(' ');
+---
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="/">{first} <span>{rest.join(' ')}</span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+</header>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  btn?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open') ?? false;
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>
