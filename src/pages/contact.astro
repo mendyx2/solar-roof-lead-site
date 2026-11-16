@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../config/site';
+---
+<Base title="Contact Us" description={`Questions about solar for your ${site.state} home? Contact ${site.name} by phone, email, or the form.`}>
+  <Breadcrumbs items={[{ name: 'Contact', href: '/contact' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container grid cols-2">
+      <div>
+        <h1>Contact us</h1>
+        <p class="lead">Questions about solar, your estimate, or working with us as an installer partner? Send us a message.</p>
+        <p><b>Phone:</b> <a href={`tel:${site.phone.replace(/[^\d+]/g, '')}`}>{site.phone}</a><br /><b>Email:</b> <a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p class="muted">Want numbers first? <a href="/solar-estimator">Try the free roof estimate</a>.</p>
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+</Base>

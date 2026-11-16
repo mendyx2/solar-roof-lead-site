@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../config/site';
+const service = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Residential solar panel installation',
+  provider: { '@type': 'Organization', name: site.name },
+  areaServed: { '@type': 'State', name: site.state },
+};
+---
+<Base title={`Residential Solar Panel Installation in ${site.state}`} description={`How home solar installation works in ${site.state}: site survey, design, permits, utility interconnection, and what to expect, step by step.`} schema={[service]}>
+  <Breadcrumbs items={[{ name: 'Solar Installation', href: '/solar-installation' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>Home solar installation in {site.state}</h1>
+      <p class="lead">From first estimate to switching on your system usually takes 6–12 weeks. Here's what happens at each step.</p>
+      <h2>1. Estimate and consultation</h2>
+      <p>Start with our <a href="/solar-estimator">free roof estimate</a>. A specialist then reviews your usage (12 months of bills is ideal), roof condition, and goals: lowest bill, backup power, or both.</p>
+      <h2>2. Site survey and design</h2>
+      <p>An installer checks your roof structure, measures shading, and inspects your electrical panel. Older homes sometimes need a main panel upgrade. The final design sets the panel layout, inverter type, and optional battery.</p>
+      <h2>3. Permits and HOA</h2>
+      <p>Your installer pulls city or county permits and handles HOA paperwork. Texas law limits HOAs from prohibiting solar, though they can set reasonable placement rules.</p>
+      <h2>4. Installation day</h2>
+      <p>Most residential systems are installed in 1–3 days: racking, panels, wiring, inverter, and any battery.</p>
+      <h2>5. Inspection and interconnection</h2>
+      <p>The city inspects the work, and your utility approves the connection to the grid ("permission to operate"). In deregulated parts of Texas, pick a retail electricity plan with a fair solar buyback rate.</p>
+      <h2>What to look for in an installer</h2>
+      <ul>
+        <li>Licensed electrician on the job, and proof of insurance</li>
+        <li>Clear written warranty on panels, inverter, and workmanship (roof penetrations included)</li>
+        <li>Itemized pricing in $/watt, with no pressure to sign the same day</li>
+        <li>Honest answers about incentives. Anyone still selling the 30% homeowner tax credit for a 2026 cash purchase isn't up to date.</li>
+      </ul>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

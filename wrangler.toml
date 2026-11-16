@@ -1,0 +1,17 @@
+# Cloudflare Pages project config. Pages Functions live in /functions.
+name = "solar-roof-lead-site"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "solar-leads"
+# Replace with the id printed by: npx wrangler d1 create solar-leads
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# Secrets (set in the Pages dashboard or with `wrangler pages secret put`):
+#   GOOGLE_SOLAR_API_KEY   server-side key restricted to the Solar API
+#   TURNSTILE_SECRET_KEY   Cloudflare Turnstile secret
+#   RESEND_API_KEY         Resend API key for lead alert emails
+#   LEAD_NOTIFY_EMAIL      where new-lead alerts go
+#   LEAD_FROM_EMAIL        verified sender, e.g. leads@yourdomain.com

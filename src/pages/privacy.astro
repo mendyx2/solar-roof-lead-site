@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+const updated = 'October 15, 2026';
+---
+<Base title="Privacy Policy" description={`How ${site.name} collects, uses, and shares your information.`}>
+  <section class="section">
+    <div class="container prose">
+      <h1>Privacy Policy</h1>
+      <p class="muted">Last updated: {updated}. <b>Template: have this reviewed by a lawyer before launch.</b></p>
+      <h2>What we collect</h2>
+      <ul>
+        <li><b>Information you enter:</b> your address, average electric bill, name, email, phone, and answers to qualifying questions.</li>
+        <li><b>Estimate details:</b> the system size and savings estimate we calculated for you.</li>
+        <li><b>Consent records:</b> the consent language you agreed to, the time, your IP address, and the page URL, kept as proof of your request.</li>
+        <li><b>Usage data:</b> basic analytics about how the site is used.</li>
+      </ul>
+      <h2>How we use it</h2>
+      <p>To show your estimate, to respond to your quote request, and to share your request with {site.contactParties.replace(`${site.name} and `, '')}, who may contact you about solar as you consented.</p>
+      <h2>Third-party services</h2>
+      <p>Address search, maps, and solar data are provided by Google Maps Platform (subject to Google's Privacy Policy). Bot protection is provided by Cloudflare Turnstile. Emails are sent through our email provider.</p>
+      <h2>Your choices</h2>
+      <p>You can opt out of calls, texts, or emails at any time (reply STOP to texts, or email {site.email}). You can ask us to access or delete your information. California residents have additional rights under the CCPA/CPRA, including the right to know, delete, correct, and opt out of the sale or sharing of personal information.</p>
+      <h2>Retention</h2>
+      <p>We keep lead records for up to 24 months, or as long as the law requires, then delete them.</p>
+      <h2>Contact</h2>
+      <p>{site.name} · {site.email} · {site.phone}</p>
+    </div>
+  </section>
+</Base>

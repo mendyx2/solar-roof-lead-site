@@ -1,0 +1,420 @@
+---
+import { site } from '../config/site';
+const consentText = `By clicking "Send my estimate", I agree that ${site.contactParties} may contact me about solar at the phone number and email I provided, including by calls and texts sent using automated technology. Consent is not a condition of purchase. Message and data rates may apply. I can opt out at any time.`;
+---
+<section class="estimator card" id="estimator" data-consent={consentText}>
+  <!-- Step 1: address + bill -->
+  <div class="step" data-step="address">
+    <h2>Step 1: Find your roof</h2>
+    <div class="row">
+      <div class="field grow">
+        <label for="address-input">Home address</label>
+        <div id="address-slot">
+          <input id="address-input" type="text" autocomplete="street-address" placeholder="Start typing your address…" />
+        </div>
+      </div>
+      <div class="field bill">
+        <label for="bill-input">Average monthly electric bill</label>
+        <div class="dollar"><span>$</span><input id="bill-input" type="number" min="20" max="2000" step="5" value="150" inputmode="numeric" /></div>
+      </div>
+    </div>
+    <div id="ts-solar" class="ts"></div>
+    <p class="small muted">We use satellite imagery and Google's solar data for your address. Nothing is shared until you choose to request a quote.</p>
+    <p class="error" id="address-error" hidden></p>
+  </div>
+
+  <!-- Map + results -->
+  <div class="step" data-step="result" hidden>
+    <div class="result-grid">
+      <div>
+        <div id="map" class="map" role="img" aria-label="Satellite view of your roof with solar panels drawn on it"></div>
+        <p class="small muted" id="imagery-note"></p>
+      </div>
+      <div>
+        <h2 id="result-title">Your solar estimate</h2>
+        <p class="notice small" id="fallback-note" hidden>
+          We couldn't get detailed roof data for this address, so this estimate is based on your bill and typical
+          local sunshine. An installer will measure your roof precisely.
+        </p>
+        <div class="packages" role="group" aria-label="Choose a package">
+          <button type="button" class="pkg" data-target="0.6">Essential<br /><span>~60% of your bill</span></button>
+          <button type="button" class="pkg" data-target="1">Recommended<br /><span>~100% of your bill</span></button>
+          <button type="button" class="pkg" data-target="max">Max roof<br /><span>Most panels that fit</span></button>
+        </div>
+        <label for="panel-slider" class="small">Or fine-tune: <b><span id="panel-count">0</span> panels</b></label>
+        <input id="panel-slider" type="range" min="0" max="0" step="1" value="0" />
+        <dl class="stats">
+          <div><dt>System size</dt><dd id="r-kw">–</dd></div>
+          <div><dt>Yearly production</dt><dd id="r-kwh">–</dd></div>
+          <div><dt>Covers your usage</dt><dd id="r-offset">–</dd></div>
+          <div><dt>Est. cost before incentives</dt><dd id="r-cost">–</dd></div>
+          <div><dt>First-year savings</dt><dd id="r-save">–</dd></div>
+          <div><dt>Est. payback</dt><dd id="r-payback">–</dd></div>
+        </dl>
+        <p class="small muted">
+          Estimate only, not a quote. Based on {site.state} average pricing, your bill, and modeled sunshine. The 30%
+          federal homeowner tax credit ended for systems installed after 2025. Leases/PPAs and local utility programs
+          may still lower your cost. <a href="/financing">See financing options</a>.
+        </p>
+        <button type="button" class="btn" id="to-lead">Get my exact quote</button>
+        <button type="button" class="btn secondary" id="restart">Try another address</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead form -->
+  <div class="step" data-step="lead" hidden>
+    <h2>Get your detailed quote</h2>
+    <p class="muted">A licensed local installer will confirm your roof measurements and send exact pricing. No obligation.</p>
+    <form id="lead-form" novalidate>
+      <div class="grid cols-2">
+        <div class="field"><label for="l-name">Full name</label><input id="l-name" name="name" required autocomplete="name" /></div>
+        <div class="field"><label for="l-email">Email</label><input id="l-email" name="email" type="email" required autocomplete="email" /></div>
+        <div class="field"><label for="l-phone">Phone</label><input id="l-phone" name="phone" type="tel" autocomplete="tel" /></div>
+        <div class="field">
+          <label for="l-owner">Do you own this home?</label>
+          <select id="l-owner" name="homeowner" required>
+            <option value="">Select…</option><option value="yes">Yes</option><option value="no">No, I rent</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="l-timeline">When are you looking to go solar?</label>
+          <select id="l-timeline" name="timeline">
+            <option value="asap">As soon as possible</option>
+            <option value="1-3 months">In 1–3 months</option>
+            <option value="3-6 months">In 3–6 months</option>
+            <option value="researching" selected>Just researching</option>
+          </select>
+        </div>
+      </div>
+      <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <label class="checkbox"><input type="checkbox" name="consent" id="l-consent" required /> <span>{consentText} See our <a href="/privacy">Privacy Policy</a>.</span></label>
+      <div id="ts-lead" class="ts"></div>
+      <p class="error" id="lead-error" hidden></p>
+      <button type="submit" class="btn">Send my estimate</button>
+      <button type="button" class="btn secondary" id="back-to-result">Back</button>
+    </form>
+  </div>
+
+  <div class="step" data-step="done" hidden>
+    <h2>Thanks, you're all set!</h2>
+    <p>We've received your request. A local solar specialist will reach out within one business day with your detailed quote.</p>
+    {site.bookingUrl && <p><a class="btn" href={site.bookingUrl} target="_blank" rel="noopener">Pick a time for a call</a></p>}
+  </div>
+</section>
+
+<style>
+  .estimator { padding: 28px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .grow { flex: 1 1 320px; }
+  .bill { flex: 0 1 220px; }
+  .dollar { display: flex; align-items: center; gap: 6px; }
+  .ts { margin: 8px 0; min-height: 0; }
+  .result-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+  @media (max-width: 860px) { .result-grid { grid-template-columns: 1fr; } }
+  .map { width: 100%; aspect-ratio: 1 / 1; border-radius: 10px; background: #dfe4ee; }
+  .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+  .pkg { border: 2px solid var(--border); background: #fff; border-radius: 10px; padding: 10px 6px; font-weight: 700; cursor: pointer; font: inherit; font-weight: 700; }
+  .pkg span { font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+  .pkg[aria-pressed='true'] { border-color: var(--brand); background: #fff7e6; }
+  input[type='range'] { padding: 0; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin: 16px 0; }
+  .stats dt { font-size: 0.8rem; color: var(--muted); }
+  .stats dd { margin: 0; font-weight: 800; font-size: 1.1rem; }
+  .step .btn { margin: 6px 6px 0 0; }
+  :global(gmp-place-autocomplete) { width: 100%; }
+</style>
+
+<script>
+  import { site, pricing, cities } from '../config/site';
+  import { estimate, pickConfig, usageFromBill, type PanelConfig } from '../lib/estimate';
+
+  declare const google: any;
+  declare const turnstile: any;
+
+  const MAPS_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_BROWSER_KEY as string | undefined;
+  const TS_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+
+  interface Panel { lat: number; lng: number; portrait: boolean; kwh: number; seg: number }
+  interface SolarData {
+    found: boolean;
+    center?: { latitude: number; longitude: number };
+    imageryDate?: { year: number; month: number; day: number };
+    panelWatts: number;
+    panelWidth: number;
+    panelHeight: number;
+    segments: { azimuth: number }[];
+    configs: PanelConfig[];
+    panels: Panel[];
+  }
+
+  const root = document.getElementById('estimator')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const show = (name: string) =>
+    root.querySelectorAll<HTMLElement>('.step').forEach((s) => (s.hidden = s.dataset.step !== name));
+
+  const state = {
+    address: '',
+    location: null as { lat: number; lng: number } | null,
+    rate: pricing.defaultRate,
+    data: null as SolarData | null,
+    configIndex: 0,
+    map: null as any,
+    polygons: [] as any[],
+    lastEstimate: null as ReturnType<typeof estimate> | null,
+  };
+
+  // ---------- lazy loaders (keep Maps off the critical path for Core Web Vitals) ----------
+  let mapsPromise: Promise<void> | null = null;
+  function loadMaps(): Promise<void> {
+    if (mapsPromise) return mapsPromise;
+    mapsPromise = new Promise((resolve, reject) => {
+      if (!MAPS_KEY) return reject(new Error('Missing PUBLIC_GOOGLE_MAPS_BROWSER_KEY'));
+      (window as any).__gmInit = () => resolve();
+      const s = document.createElement('script');
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(MAPS_KEY)}&v=weekly&loading=async&callback=__gmInit`;
+      s.async = true;
+      s.onerror = () => reject(new Error('Google Maps failed to load'));
+      document.head.appendChild(s);
+    });
+    return mapsPromise;
+  }
+
+  let tsPromise: Promise<void> | null = null;
+  function loadTurnstile(): Promise<void> {
+    if (!TS_KEY) return Promise.resolve();
+    if (tsPromise) return tsPromise;
+    tsPromise = new Promise((resolve, reject) => {
+      (window as any).__tsInit = () => resolve();
+      const s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__tsInit';
+      s.async = true;
+      s.onerror = () => reject(new Error('Turnstile failed to load'));
+      document.head.appendChild(s);
+    });
+    return tsPromise;
+  }
+
+  const widgets: Record<string, string> = {};
+  async function getToken(slot: string): Promise<string> {
+    if (!TS_KEY) return '';
+    await loadTurnstile();
+    if (!widgets[slot]) widgets[slot] = turnstile.render(`#${slot}`, { sitekey: TS_KEY, size: 'flexible' });
+    for (let i = 0; i < 200; i++) {
+      const t = turnstile.getResponse(widgets[slot]);
+      if (t) return t;
+      await new Promise((r) => setTimeout(r, 150));
+    }
+    throw new Error('Please complete the verification check.');
+  }
+  function resetToken(slot: string) {
+    if (TS_KEY && widgets[slot]) turnstile.reset(widgets[slot]);
+  }
+
+  // ---------- step 1: address autocomplete ----------
+  const addrInput = $<HTMLInputElement>('address-input');
+  const addrError = $<HTMLParagraphElement>('address-error');
+  const fail = (el: HTMLElement, msg: string) => { el.textContent = msg; el.hidden = false; };
+
+  addrInput.addEventListener('focus', initAutocomplete, { once: true });
+
+  async function initAutocomplete() {
+    try {
+      await loadMaps();
+      getToken('ts-solar').catch(() => {}); // render the check early so it's ready
+      const { PlaceAutocompleteElement } = await google.maps.importLibrary('places');
+      const pac = new PlaceAutocompleteElement({ includedRegionCodes: ['us', 'ca'] });
+      pac.id = 'address-pac';
+      $('address-slot').replaceChildren(pac);
+      pac.focus?.();
+      pac.addEventListener('gmp-select', async (ev: any) => {
+        const place = ev.placePrediction.toPlace();
+        await place.fetchFields({ fields: ['formattedAddress', 'location'] });
+        state.address = place.formattedAddress ?? '';
+        state.location = { lat: place.location.lat(), lng: place.location.lng() };
+        await runEstimate();
+      });
+    } catch (e) {
+      fail(addrError, `The address search couldn't load (${(e as Error).message}). Please use the contact form instead.`);
+    }
+  }
+
+  function rateFor(address: string): number {
+    const city = cities.find((c) => address.toLowerCase().includes(`${c.name.toLowerCase()},`));
+    return city?.rate ?? pricing.defaultRate;
+  }
+
+  // ---------- solar data ----------
+  async function runEstimate() {
+    addrError.hidden = true;
+    if (!state.location) return;
+    state.rate = rateFor(state.address);
+    let data: SolarData | null = null;
+    try {
+      const token = await getToken('ts-solar');
+      const res = await fetch('/api/solar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...state.location, token }),
+      });
+      resetToken('ts-solar');
+      if (res.ok) data = await res.json();
+      else if (res.status === 403) return fail(addrError, 'Verification failed. Please try again.');
+    } catch (e) {
+      return fail(addrError, (e as Error).message);
+    }
+    state.data = data?.found ? data : fallbackData();
+    show('result');
+    await drawMap();
+    $<HTMLElement>('fallback-note').hidden = !!data?.found;
+    const d = data?.imageryDate;
+    $('imagery-note').textContent = data?.found && d
+      ? `Imagery date: ${d.month}/${d.year}. Panel layout is modeled, not a final design.`
+      : 'Panel layout shown after an on-site or satellite measurement.';
+    selectPackage('1');
+  }
+
+  /** Bill-based estimate when Google has no roof model for the address. */
+  function fallbackData(): SolarData {
+    const watts = 400;
+    const configs: PanelConfig[] = [];
+    for (let n = 6; n <= 60; n++) {
+      configs.push({ panelsCount: n, yearlyEnergyDcKwh: (n * watts / 1000) * pricing.fallbackKwhPerKw / pricing.dcToAc });
+    }
+    return { found: false, panelWatts: watts, panelWidth: 1, panelHeight: 1.7, segments: [], configs, panels: [] };
+  }
+
+  // ---------- map + panel overlay ----------
+  async function drawMap() {
+    const { Map } = await google.maps.importLibrary('maps');
+    const center = state.data?.center
+      ? { lat: state.data.center.latitude, lng: state.data.center.longitude }
+      : state.location!;
+    if (!state.map) {
+      state.map = new Map($('map'), {
+        center, zoom: 20, mapTypeId: 'satellite', tilt: 0, disableDefaultUI: true, zoomControl: true, gestureHandling: 'cooperative',
+      });
+    } else {
+      state.map.setCenter(center);
+      state.map.setZoom(20);
+    }
+  }
+
+  // Offset a point by `meters` along `heading` (degrees clockwise from north).
+  function offset(lat: number, lng: number, meters: number, heading: number) {
+    const h = (heading * Math.PI) / 180;
+    const dLat = (meters * Math.cos(h)) / 111320;
+    const dLng = (meters * Math.sin(h)) / (111320 * Math.cos((lat * Math.PI) / 180));
+    return { lat: lat + dLat, lng: lng + dLng };
+  }
+
+  function drawPanels(count: number) {
+    state.polygons.forEach((p) => p.setMap(null));
+    state.polygons = [];
+    const d = state.data;
+    if (!d || !d.found) return;
+    const w = d.panelWidth / 2;
+    const h = d.panelHeight / 2;
+    const corners = [[w, h], [w, -h], [-w, -h], [-w, h]];
+    for (const p of d.panels.slice(0, count)) {
+      const azimuth = d.segments[p.seg]?.azimuth ?? 0;
+      const rot = (p.portrait ? 90 : 0) + azimuth;
+      const path = corners.map(([x, y]) =>
+        offset(p.lat, p.lng, Math.hypot(x, y), (Math.atan2(y, x) * 180) / Math.PI + rot),
+      );
+      state.polygons.push(new google.maps.Polygon({
+        paths: path, map: state.map, clickable: false,
+        fillColor: '#1e3a8a', fillOpacity: 0.92, strokeColor: '#cbd5e1', strokeWeight: 1,
+      }));
+    }
+  }
+
+  // ---------- packages + results ----------
+  const slider = $<HTMLInputElement>('panel-slider');
+  const billInput = $<HTMLInputElement>('bill-input');
+  const money = (n: number) => n.toLocaleString(site.locale, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+  function bill() { return Math.max(0, Number(billInput.value) || 0); }
+
+  function selectPackage(target: string) {
+    const d = state.data;
+    if (!d) return;
+    let cfg: PanelConfig | undefined;
+    if (target === 'max') cfg = d.configs[d.configs.length - 1];
+    else cfg = pickConfig(d.configs, usageFromBill(bill(), state.rate), Number(target), pricing.dcToAc);
+    state.configIndex = Math.max(0, d.configs.indexOf(cfg!));
+    root.querySelectorAll<HTMLButtonElement>('.pkg').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.target === target)));
+    render();
+  }
+
+  function render() {
+    const d = state.data;
+    if (!d) return;
+    slider.max = String(d.configs.length - 1);
+    slider.value = String(state.configIndex);
+    const cfg = d.configs[state.configIndex];
+    const e = estimate(
+      { panels: cfg.panelsCount, panelWatts: d.panelWatts, yearlyDcKwh: cfg.yearlyEnergyDcKwh, monthlyBill: bill(), rate: state.rate },
+      pricing,
+    );
+    state.lastEstimate = e;
+    $('panel-count').textContent = String(cfg.panelsCount);
+    $('r-kw').textContent = `${e.systemKw} kW`;
+    $('r-kwh').textContent = `${e.yearlyKwh.toLocaleString(site.locale)} kWh`;
+    $('r-offset').textContent = `${e.offsetPct}%`;
+    $('r-cost').textContent = `${money(e.range.costLow)}–${money(e.range.costHigh)}`;
+    $('r-save').textContent = `${money(e.range.savingsLow)}–${money(e.range.savingsHigh)}`;
+    $('r-payback').textContent = e.paybackYears ? `${e.paybackYears} yrs` : '25+ yrs';
+    drawPanels(cfg.panelsCount);
+  }
+
+  root.querySelectorAll<HTMLButtonElement>('.pkg').forEach((b) => b.addEventListener('click', () => selectPackage(b.dataset.target!)));
+  slider.addEventListener('input', () => {
+    state.configIndex = Number(slider.value);
+    root.querySelectorAll('.pkg').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    render();
+  });
+  billInput.addEventListener('change', () => { if (state.data) render(); });
+
+  $('restart').addEventListener('click', () => { show('address'); });
+  $('to-lead').addEventListener('click', () => { show('lead'); getToken('ts-lead').catch(() => {}); });
+  $('back-to-result').addEventListener('click', () => show('result'));
+
+  // ---------- lead form ----------
+  const form = $<HTMLFormElement>('lead-form');
+  const leadError = $<HTMLParagraphElement>('lead-error');
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    leadError.hidden = true;
+    if (!form.reportValidity()) return;
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    btn.disabled = true;
+    try {
+      const fd = new FormData(form);
+      const token = await getToken('ts-lead');
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'estimator',
+          name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'),
+          homeowner: fd.get('homeowner'), timeline: fd.get('timeline'), company: fd.get('company'),
+          address: state.address, monthlyBill: bill(),
+          estimate: state.lastEstimate ? { ...state.lastEstimate, roofDataFound: state.data?.found ?? false } : null,
+          consent: $<HTMLInputElement>('l-consent').checked,
+          consentText: root.dataset.consent,
+          pageUrl: location.href,
+          token,
+        }),
+      });
+      resetToken('ts-lead');
+      if (!res.ok) throw new Error('Something went wrong. Please check your details and try again.');
+      show('done');
+      (window as any).gtag?.('event', 'generate_lead', { source: 'estimator' });
+    } catch (e) {
+      fail(leadError, (e as Error).message);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>

@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Estimator from '../components/Estimator.astro';
+import { site } from '../config/site';
+---
+<Base
+  title={`Free Solar Estimate: See Panels on Your Roof`}
+  description={`Enter your ${site.state} address to see solar panels on your roof from above, plus cost, savings, and payback estimates. Free, no sign-up needed to see your results.`}
+>
+  <Breadcrumbs items={[{ name: 'Free Solar Estimate', href: '/solar-estimator' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container">
+      <h1>Free solar estimate for your roof</h1>
+      <p class="lead">Type your address and your average electric bill. You'll see your roof from above with panels placed where they'd produce the most, plus a cost and savings range.</p>
+      <Estimator />
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container prose">
+      <h2>How we calculate your estimate</h2>
+      <p>For most addresses we use Google's solar model of your roof. It maps each roof section's angle and direction, shading from trees and nearby buildings, and a year of sun positions and weather. That tells us how many panels fit and how much energy each one would produce.</p>
+      <p>We convert that to usable electricity after typical system losses and compare it with your bill. Cost uses average {site.state} installed pricing per watt. Savings assume utility prices rise about 2.5% a year and panels lose about 0.5% of their output each year.</p>
+      <p>Where detailed roof data isn't available, we estimate from your bill and typical local sunshine instead. Either way, a licensed installer confirms everything before you get a real quote.</p>
+    </div>
+  </section>
+</Base>

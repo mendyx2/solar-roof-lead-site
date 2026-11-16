@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site } from '../../config/site';
+import { posts } from './_posts';
+const post = posts.find((p) => p.slug === 'is-solar-worth-it-in-texas-2026')!;
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.description,
+  datePublished: post.date,
+  author: { '@type': 'Organization', name: site.name },
+};
+---
+<Base title={post.title} description={post.description} schema={[article]} ogType="article">
+  <Breadcrumbs items={[{ name: 'Blog', href: '/blog' }, { name: post.title, href: `/blog/${post.slug}` }]} />
+  <article class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>{post.title}</h1>
+      <p class="muted small">Published {post.date}</p>
+      <p class="lead">{post.description}</p>
+      <h2>What changed in 2026</h2>
+      <p>Through 2025, homeowners who bought solar could claim a 30% federal tax credit. That credit (Section 25D) ended for systems installed after December 31, 2025. On a $25,000 system, that's $7,500 a 2026 buyer no longer gets back.</p>
+      <h2>Who still comes out ahead</h2>
+      <ul>
+        <li><b>High summer bills.</b> If you regularly pay $150+ a month, solar replaces expensive peak-season power.</li>
+        <li><b>A good roof facing south or west</b> with little shade.</li>
+        <li><b>Plans to stay 10+ years</b>, long enough to get past payback.</li>
+        <li><b>A good buyback plan</b> (deregulated areas) or a favorable utility program (Austin Energy, CPS Energy).</li>
+      </ul>
+      <h2>Rough math</h2>
+      <p>An 8 kW system in Texas might produce about 10,000–11,500 kWh a year. At about $0.15/kWh, that's roughly $1,300–$1,700 in first-year savings, depending on how much you use yourself versus export. At about $2.75/W, the system costs around $22,000 before any utility incentives, so payback lands somewhere around 11–14 years. Panels typically last 25+ years.</p>
+      <h2>Leases and PPAs are worth a fresh look</h2>
+      <p>Companies that own the system can still use business tax credits, so a lease or PPA can sometimes beat buying in 2026. Read the contract terms carefully.</p>
+      <h2>The best way to know: check your own roof</h2>
+      <p>Averages hide a lot. Our <a href="/solar-estimator">free estimator</a> models your specific roof and bill in about 30 seconds.</p>
+    </div>
+  </article>
+  <CtaBand />
+</Base>

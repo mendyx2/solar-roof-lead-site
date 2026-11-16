@@ -1,0 +1,6 @@
+# Server-side secrets for `wrangler pages dev`. Copy to .dev.vars.
+GOOGLE_SOLAR_API_KEY=
+TURNSTILE_SECRET_KEY=
+RESEND_API_KEY=
+LEAD_NOTIFY_EMAIL=
+LEAD_FROM_EMAIL=

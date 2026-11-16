@@ -1,0 +1,72 @@
+---
+import { site } from '../config/site';
+const consentText = `By submitting, I agree that ${site.contactParties} may contact me about my request at the phone number and email I provided, including by calls and texts sent using automated technology. Consent is not a condition of purchase. I can opt out at any time.`;
+---
+<form id="contact-form" class="card" data-consent={consentText} novalidate>
+  <div class="grid cols-2">
+    <div class="field"><label for="c-name">Full name</label><input id="c-name" name="name" required autocomplete="name" /></div>
+    <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>
+    <div class="field"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" autocomplete="tel" /></div>
+    <div class="field"><label for="c-address">Address or ZIP</label><input id="c-address" name="address" autocomplete="street-address" /></div>
+  </div>
+  <div class="field"><label for="c-msg">How can we help?</label><textarea id="c-msg" name="message" rows="4"></textarea></div>
+  <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <label class="checkbox"><input type="checkbox" id="c-consent" required /> <span>{consentText} See our <a href="/privacy">Privacy Policy</a>.</span></label>
+  <div id="ts-contact" class="ts"></div>
+  <p class="error" id="c-error" hidden></p>
+  <p id="c-done" hidden><b>Thanks! We'll get back to you within one business day.</b></p>
+  <button class="btn" type="submit">Send message</button>
+</form>
+
+<script>
+  declare const turnstile: any;
+  const TS_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const err = document.getElementById('c-error')!;
+  let widget: string | null = null;
+
+  function ensureTurnstile(): Promise<void> {
+    if (!TS_KEY) return Promise.resolve();
+    if ((window as any).turnstile) return Promise.resolve();
+    return new Promise((resolve) => {
+      (window as any).__tsContact = () => resolve();
+      const s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__tsContact';
+      s.async = true;
+      document.head.appendChild(s);
+    });
+  }
+  form.addEventListener('focusin', async () => {
+    if (!TS_KEY || widget) return;
+    await ensureTurnstile();
+    widget ??= turnstile.render('#ts-contact', { sitekey: TS_KEY, size: 'flexible' });
+  }, { once: true });
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    err.hidden = true;
+    if (!form.reportValidity()) return;
+    const fd = new FormData(form);
+    const token = TS_KEY && widget ? turnstile.getResponse(widget) : '';
+    if (TS_KEY && !token) { err.textContent = 'Please complete the verification check.'; err.hidden = false; return; }
+    const res = await fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'contact',
+        name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), address: fd.get('address'),
+        message: fd.get('message'), company: fd.get('company'),
+        consent: (document.getElementById('c-consent') as HTMLInputElement).checked,
+        consentText: form.dataset.consent, pageUrl: location.href, token,
+      }),
+    });
+    if (TS_KEY && widget) turnstile.reset(widget);
+    if (res.ok) {
+      form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLInputElement).disabled = true));
+      document.getElementById('c-done')!.hidden = false;
+    } else {
+      err.textContent = 'Something went wrong. Please check your details or call us.';
+      err.hidden = false;
+    }
+  });
+</script>

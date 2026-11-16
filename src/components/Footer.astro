@@ -1,0 +1,41 @@
+---
+import { site, cities } from '../config/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <h3>{site.name}</h3>
+        <p class="small">{site.description}</p>
+        <p class="small"><a href={`tel:${site.phone.replace(/[^\d+]/g, '')}`}>{site.phone}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+      <div>
+        <h3>Solar</h3>
+        <ul>
+          <li><a href="/solar-estimator">Free Solar Estimate</a></li>
+          <li><a href="/solar-installation">Solar Installation</a></li>
+          <li><a href="/financing">Financing &amp; Incentives</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Service Areas</h3>
+        <ul>
+          {cities.map((c) => <li><a href={`/service-areas/${c.slug}`}>Solar in {c.name}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="small" style="margin-top:32px">© {year} {site.name}. Estimates are for information only and are not a quote or a guarantee of savings.</p>
+  </div>
+</footer>

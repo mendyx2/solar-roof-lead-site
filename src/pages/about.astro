@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../config/site';
+---
+<Base title="About Us" description={`${site.name} helps ${site.state} homeowners see what solar would look like on their roof and connects them with vetted local installers.`}>
+  <Breadcrumbs items={[{ name: 'About', href: '/about' }]} />
+  <section class="section" style="padding-top:16px">
+    <div class="container prose">
+      <h1>About {site.name}</h1>
+      <p class="lead">Going solar is a big decision. We think you should see real numbers for your own roof before anyone calls you.</p>
+      <p>{site.name} gives every {site.state} homeowner a free satellite view of their roof with a modeled panel layout, plus an honest estimate of cost, savings, and payback. When you're ready, we connect you with licensed local installers who confirm the details and quote exact pricing.</p>
+      <h2>What we promise</h2>
+      <ul>
+        <li>Clear assumptions and price ranges, never "free solar" claims</li>
+        <li>Up-to-date incentive information, including what changed in 2026</li>
+        <li>We only contact you if you ask us to, and you can opt out any time</li>
+      </ul>
+      <!-- TODO before launch: add real team photos, license numbers, and partner installer details. -->
+    </div>
+  </section>
+  <CtaBand />
+</Base>
